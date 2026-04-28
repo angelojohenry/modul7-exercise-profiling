@@ -15,19 +15,16 @@
 <img width="1919" height="1015" alt="image" src="https://github.com/user-attachments/assets/936e61a6-313c-4de5-877e-7a6864f86143" />
 - Rata-rata sample time berkurang dari yang awalnya 84642 ms menjadi 6039 ms
 - Terdapat peningkatan sebesar 93%
-Performa awal sangat lambat akibat masalah **N+1 Query** dan *nested loop* yang mengalokasikan banyak memori untuk objek `StudentCourse` baru. Setelah optimasi, pengambilan data relasi diubah menjadi satu pemanggilan `findAll()` langsung ke tabel *mapping*, yang menurunkan beban I/O database dan meringankan kerja *Garbage Collector* secara drastis.
 
 3. /all-student-name
 <img width="1919" height="1017" alt="image" src="https://github.com/user-attachments/assets/09886af1-563b-41f5-9d77-1d405722bb01" />
 - Rata-rata sample time berkurang dari yang awalnya 3601 ms menjadi 140 ms
 - Terdapat peningkatan sebesar 96%
-Beban CPU sebelumnya memuncak karena penggunaan operator `+=` untuk menggabungkan `String` di dalam *loop* 2000 data, yang secara terus-menerus membuang dan membuat objek `String` baru di memori. Optimasi dilakukan dengan menerapkan **Java Stream API (`Collectors.joining`)** yang menggunakan `StringBuilder` di belakang layar, sehingga penggunaan memori jauh lebih efisien dan *Garbage Collector* tidak kewalahan.
 
 5. /highest-gpa
 <img width="1919" height="1016" alt="image" src="https://github.com/user-attachments/assets/33422beb-1e34-43bd-a2fd-55e3b86d129e" />
 - Rata-rata sample time berkurang dari yang awalnya 92 ms menjadi 8 ms
 - Terdapat peningkatan sebesar 91%
-Sebelumnya, aplikasi memuat seluruh data mahasiswa ke dalam memori aplikasi (RAM) hanya untuk mencari satu nilai tertinggi menggunakan iterasi manual. Performa berhasil dioptimasi dengan mendelegasikan proses pengurutan (*sorting*) dan pencarian ke database menggunakan *custom query* (`findFirstByOrderByGpaDesc()`). Hal ini membuat transfer data dari database ke aplikasi menjadi sangat kecil (hanya 1 baris objek).
 
 # Refleksi
 1.
